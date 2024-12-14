@@ -1,0 +1,84 @@
+{% extends 'main/base.html' %}
+{% block title %} Add Work {% endblock %}
+
+
+{% block content %}
+<div class="page-background">
+    <div class="form-container">
+        <h1 class="form-heading">Add New Work</h1>
+        <form method="POST" enctype="multipart/form-data" class="form">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_title" class="form-label">Company</label>
+                    {{ form.title }}
+                </div>
+                <div class="form-group">
+                    <label for="id_position" class="form-label">Position</label>
+                    {{ form.position }}
+                </div>
+                <div class="form-group">
+                    <label for="id_duration" class="form-label">Duration</label>
+                    {{ form.duration }}
+                </div>
+                <div class="form-group">
+                    <label for="id_url" class="form-label">URL</label>
+                    {{ form.url }}
+                </div>
+                <div class="form-group">
+                    <label for="id_github" class="form-label">GitHub</label>
+                    {{ form.github }}
+                </div>
+                <div class="form-group">
+                    <label for="id_image" class="form-label">Image</label>
+                    {{ form.image }}
+                </div>
+                <div class="form-group">
+                    <label for="id_subtitle" class="form-label">Subtitle</label>
+                    {{ form.subtitle }}
+                </div>
+                <div class="form-group">
+                    <label for="id_content1" class="form-label">Content 1</label>
+                    {{ form.content1 }}
+                </div>
+                <div class="form-group">
+                    <label for="id_content2" class="form-label">Content 2</label>
+                    {{ form.content2 }}
+                </div>
+                <div class="form-group">
+                    <label for="id_content3" class="form-label">Content 3</label>
+                    {{ form.content3 }}
+                </div>
+                <div class="form-group">
+                    <p class="form-label">Select Stacks:</p>
+                    <div class="checkbox-grid">
+                        {% for stack in stacks %}
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="stacks" value="{{ stack.id }}" id="stack_{{ stack.id }}" class="checkbox">
+                            <label for="stack_{{ stack.id }}" class="checkbox-label">{{ stack.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-button">
+                    <button type="submit" class="submit-button">Add Work</button>
+                    <a href="{% url 'work-list' %}" class="submit-back">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

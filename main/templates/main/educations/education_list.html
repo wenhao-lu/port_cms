@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+{% block title %} Education History {% endblock %}
+
+
+{% block content %}
+<div class="list-container">
+  <div class="list-content">
+    <p class="list-heading">Manage Education</p>
+
+    <table class="list-table">
+      <thead>
+        <tr class="list-table-header">
+          <th class="list-table-cell">Degree</th>
+          <th class="list-table-cell">Major</th>
+          <th class="list-table-cell">School</th>
+          <th class="list-table-cell">Date</th>
+          <th class="list-table-cell">Course</th>
+          <th class="list-table-cell">Edit</th>
+          <th class="list-table-cell">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for education in educations %}
+        <tr class="list-table-row hover:bg-gray-100">
+          <td class="list-table-cell">{{ education.degree }}</td>
+          <td class="list-table-cell">{{ education.major }}</td>
+          <td class="list-table-cell">{{ education.school }}</td>
+          <td class="list-table-cell">{{ education.date }}</td>
+          <td class="list-table-cell">{{ education.course }}</td>
+
+          <td class="list-table-cell">
+            <a href="{% url 'edit-education' education.id %}" class="list-action-link">Edit</a>
+          </td>
+          <td class="list-table-cell">
+            <a href="{% url 'delete-education' education.id %}" class="list-action-link list-delete-link">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="list-empty-message">
+            No educations available.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="list-button-container">
+      <a href="{% url 'add-education' %}" class="list-button list-new">New Education</a>
+      <a href="{% url 'dashboard-view' %}" class="list-button list-return-back">Return Back</a>
+    </div>
+  </div>
+</div>
+
+
+  
+{% endblock %}

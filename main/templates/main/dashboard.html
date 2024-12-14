@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block title %} Dashboard {% endblock %}
+
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <p class="dashboard-heading">Welcome to CMS Dashboard</p>
+    </div>
+
+        <div class="dashboard-links">
+            <div class="dashboard-link-container">
+                <div class="dashboard-link-div"><a href="{% url 'project-list' %}" class="dashboard-link">Projects</a></div>
+                <div class="dashboard-link-div"><a href="{% url 'stack-list' %}" class="dashboard-link">Stack</a></div>
+                <div class="dashboard-link-div"><a href="{% url 'work-list' %}" class="dashboard-link">Work</a></div>
+                <div class="dashboard-link-div"><a href="{% url 'education-list' %}" class="dashboard-link">Education</a></div>
+            </div>
+        </div>
+
+
+
+
+
+
+{% endblock %}

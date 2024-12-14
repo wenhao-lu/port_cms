@@ -1,61 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project List</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto mt-10">
-      <h1 class="text-3xl font-bold mb-6">Project List</h1>
-      <table class="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="border border-gray-300 px-4 py-2">Title</th>
-            <th class="border border-gray-300 px-4 py-2">URL</th>
-            <th class="border border-gray-300 px-4 py-2">Subtitle</th>
-            <th class="border border-gray-300 px-4 py-2">Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for project in projects %}
-          <tr class="bg-white hover:bg-gray-100">
-            <td class="border border-gray-300 px-4 py-2">
-              {{ project.title }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {% if project.url %}
-              <a
-                href="{{ project.url }}"
-                class="text-blue-600 hover:underline"
-                target="_blank"
-                >{{ project.url }}</a
-              >
-              {% else %} N/A {% endif %}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{ project.subtitle }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{ project.created|date:"Y-m-d" }}
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td
-              colspan="4"
-              class="text-center border border-gray-300 px-4 py-2"
-            >
-              No projects available.
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+{% extends 'main/base.html' %}
+{% block title %} My Projects {% endblock %}
+
+
+{% block content %}
+<div class="list-container">
+  <div class="list-content">
+    <p class="list-heading">Manage Projects</p>
+
+    <table class="list-table">
+      <thead>
+        <tr class="list-table-header">
+          <th class="list-table-cell">Image</th>
+          <th class="list-table-cell">Title</th>
+          <th class="list-table-cell">Live</th>
+          <th class="list-table-cell">GitHub</th>
+          <th class="list-table-cell">Stack</th>
+          <th class="list-table-cell">Edit</th>
+          <th class="list-table-cell">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in projects %}
+        <tr class="list-table-row hover:bg-gray-100">
+          <td class="list-table-cell">
+            {% if project.image %}
+            <img src="{{ project.image.url }}" width="200" />
+            {% endif %}
+          </td>
+          <td class="list-table-cell">{{ project.title }}</td>
+          <td class="list-table-cell">
+            <a href="{{ project.url }}" class="list-link" target="_blank">
+              {{ project.url }}
+            </a>
+          </td>
+          <td class="list-table-cell">
+            <a href="{{ project.github }}" class="list-link" target="_blank">
+              {{ project.github }}
+            </a>
+          </td>
+          <td class="list-table-cell">
+            {% if project.stacks.all %}
+              {% for stack in project.stacks.all %}
+              <span class="list-stack-chip">{{ stack.name }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="list-empty-text">Add stacks</span>
+            {% endif %}
+          </td>
+          <td class="list-table-cell">
+            <a href="{% url 'edit-project' project.id %}" class="list-action-link">Edit</a>
+          </td>
+          <td class="list-table-cell">
+            <a href="{% url 'delete-project' project.id %}" class="list-action-link list-delete-link">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="list-empty-message">
+            No projects available.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="list-button-container">
+      <a href="{% url 'add-project' %}" class="list-button list-new">New Project</a>
+      <a href="{% url 'dashboard-view' %}"  class="list-button list-return-back">Return Back</a>
     </div>
-  </body>
-</html>
+  </div>
+</div>
+
+
+
+{% endblock %}

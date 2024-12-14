@@ -1,26 +1,46 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}My Portfolio CMS{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  </head>
-  <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/dashboard/">Dashboard</a></li>
-          <li><a href="/logout/">Logout</a></li>
-        </ul>
-      </nav>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %} Kevin's CMS {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="base-body">
+
+    <header class="base-header">
+        <div class="base-container base-header-container">
+            <a href="{% url 'dashboard-view' %}" class="base-logo">Kevin's CMS</a>
+            <nav class="base-nav">
+                <a href="{% url 'dashboard-view' %}" class="base-nav-link">Home</a>
+                <a href="{% url 'project-list' %}"  class="base-nav-link">Projects</a>
+                <a href="{% url 'work-list' %}" class="base-nav-link">Work</a>
+                <a href="{% url 'stack-list' %}" class="base-nav-link">Stack</a>
+                <a href="{% url 'education-list' %}" class="base-nav-link">Education</a>
+                <a href="/" class="base-nav-link">Logout</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="content">{% block content %} {% endblock %}</div>
+    <main class="base-container base-main">
+        {% block content %}{% endblock %}
+    </main>
 
-    <footer>
-      <p>&copy; 2024 Kevin Lu. All rights reserved.</p>
+    <footer class="base-footer">
+        <div class="base-container base-footer-content">
+            <p>&copy; 2024 Kevin Lu. All rights reserved.</p>
+        </div>
     </footer>
-  </body>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+
 </html>

@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+{% block title %} Work Experience {% endblock %}
+
+
+{% block content %}
+<div class="list-container">
+  <div class="list-content">
+    <p class="list-heading">Manage Works</p>
+
+    <table class="list-table">
+      <thead>
+        <tr class="list-table-header">
+          <th class="list-table-cell">Image</th>
+          <th class="list-table-cell">Company</th>
+          <th class="list-table-cell">Live</th>
+          <th class="list-table-cell">GitHub</th>
+          <th class="list-table-cell">Stack</th>
+          <th class="list-table-cell">Edit</th>
+          <th class="list-table-cell">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for work in works %}
+        <tr class="list-table-row">
+          <td class="list-table-cell">
+            {% if work.image %}
+            <img src="{{ work.image.url }}" width="200" />
+            {% endif %}
+          </td>
+          <td class="list-table-cell">{{ work.title }}</td>
+          <td class="list-table-cell">
+            <a href="{{ work.url }}" class="list-link" target="_blank">{{ work.url }}</a>
+          </td>
+          <td class="list-table-cell">
+            <a href="{{ work.github }}" class="list-link" target="_blank">{{ work.github }}</a>
+          </td>
+          <td class="list-table-cell">
+            {% if work.stacks.all %}
+              {% for stack in work.stacks.all %}
+                <span class="list-stack-tag">{{ stack.name }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="list-stack-placeholder">Add stacks</span>
+            {% endif %}
+          </td>
+          <td class="list-table-cell">
+            <a href="{% url 'edit-work' work.id %}" class="list-action-link">Edit</a>
+          </td>
+          <td class="list-table-cell">
+            <a href="{% url 'delete-work' work.id %}" class="list-action-link list-delete-link">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="list-empty-message">
+            No works available.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="list-button-container">
+      <a href="{% url 'add-work' %}" class="list-button list-new">New Work</a>
+      <a href="{% url 'dashboard-view' %}" class="list-button list-return-back">Return Back</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

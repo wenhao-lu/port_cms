@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% block title %} Delete Stack {% endblock %}
+
+{% block content %}
+
+<div class="del-container">
+    <div class="del-box">
+        <h1 class="del-heading">Are you sure you want to delete this stack record?</h1>
+        <p class="del-info">Name: <strong>{{ stack.name }}</strong></p>
+        <p class="del-info">Url: <strong>{{ stack.url }}</strong></p>
+        <div class="del-info">Image: 
+            {% if stack.image %}
+                <img src="{{ stack.image.url }}" width="200" />
+            {% endif %}
+        </div>
+        <form method="POST" class="del-form">
+            {% csrf_token %}
+            <button type="submit" class="del-button del-delete-button">Yes, Delete</button>
+            <a href="{% url 'stack-list' %}" class="del-button del-cancel-button">Cancel</a>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

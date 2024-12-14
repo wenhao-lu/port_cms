@@ -11,18 +11,13 @@ class Project(models.Model):
     content1 = models.TextField(null=True, blank=True)  
     content2 = models.TextField(null=True, blank=True)  
     content3 = models.TextField(null=True, blank=True)  
-    stack1 = models.CharField(max_length=50,null=True, blank=True)  
-    stack2 = models.CharField(max_length=50,null=True, blank=True)  
-    stack3 = models.CharField(max_length=50,null=True, blank=True)  
-    stack4 = models.CharField(max_length=50,null=True, blank=True)  
-    stack5 = models.CharField(max_length=50,null=True, blank=True)  
-    stack6 = models.CharField(max_length=50,null=True, blank=True)  
-    stack7 = models.CharField(max_length=50,null=True, blank=True)  
-    stack8 = models.CharField(max_length=50,null=True, blank=True)  
-    stack9 = models.CharField(max_length=50,null=True, blank=True)  
-    stack10 = models.CharField(max_length=50,null=True, blank=True)  
+    stacks = models.ManyToManyField('Stack', related_name='projects', blank=True) 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
 
 class Education(models.Model):
     degree = models.CharField(max_length=100)  
@@ -32,6 +27,10 @@ class Education(models.Model):
     course = models.CharField(max_length=255,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.degree
+
 
 class Work(models.Model):
     title = models.CharField(max_length=100)  
@@ -44,15 +43,21 @@ class Work(models.Model):
     content1 = models.TextField(null=True, blank=True)  
     content2 = models.TextField(null=True, blank=True)  
     content3 = models.TextField(null=True, blank=True)  
-    stack1 = models.CharField(max_length=50,null=True, blank=True)  
-    stack2 = models.CharField(max_length=50,null=True, blank=True)
-    stack3 = models.CharField(max_length=50,null=True, blank=True)
-    stack4 = models.CharField(max_length=50,null=True, blank=True)
-    stack5 = models.CharField(max_length=50,null=True, blank=True)
-    stack6 = models.CharField(max_length=50,null=True, blank=True)
-    stack7 = models.CharField(max_length=50,null=True, blank=True)
-    stack8 = models.CharField(max_length=50,null=True, blank=True)
-    stack9 = models.CharField(max_length=50,null=True, blank=True)
-    stack10 = models.CharField(max_length=50,null=True, blank=True)
+    stacks = models.ManyToManyField('Stack', related_name='works', blank=True) 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Stack(models.Model):
+    name = models.CharField(max_length=100)  
+    url = models.URLField(null=True, blank=True)
+    image = models.ImageField(upload_to='stacks/',null=True, blank=True) 
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+

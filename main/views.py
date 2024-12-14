@@ -1,23 +1,203 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Project
-from .serializers import ProjectSerializer
+from .models import Project, Work, Stack, Education
+from .serializers import ProjectSerializer, WorkSerializer, StackSerializer, EducationSerializer
+from .forms import ProjectForm, WorkForm, StackForm, EducationForm
+from django.contrib import messages
 
 
-# controller
+def dashboard_view(request):
+    context = {'title': 'Dashboard','message': 'Welcome to the Dashboard!' }
+    return render(request, 'main/dashboard.html', context)
+
+# Controller
+# Project
 def project_list_view(request):
-    projects = Project.objects.all()  
+    projects = Project.objects.prefetch_related('stacks').all() 
     return render(request, 'main/projects/project_list.html', {'projects': projects})
+# Project Add
+def add_project(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)  
+        if form.is_valid():
+            project = form.save(commit=False)
+            selected_stacks = request.POST.getlist("stacks")
+            form.save()
+            if selected_stacks:
+                project.stacks.set(selected_stacks)
+            return redirect('project-list')  
+    else:
+        form = ProjectForm()
+        stacks = Stack.objects.all() 
+    return render(request, 'main/projects/add_project.html', {'form': form,"stacks": stacks})
+# Project Edit
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            selected_stacks = request.POST.getlist("stacks")
+            form.save()  
+            if selected_stacks:
+                project.stacks.set(selected_stacks)
+            return redirect('project-list') 
+    else:
+        form = ProjectForm(instance=project)  
+        stacks = Stack.objects.all() 
+    return render(request, 'main/projects/edit_project.html', {'form': form, 'project': project, "stacks": stacks})
+# Project Delete
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    if request.method == 'POST':
+        project.delete()
+        messages.success(request, "Project deleted successfully")
+        return redirect('project-list') 
+    return render(request, 'main/projects/delete_project.html', {'project': project})
+
+
+
+# Work
+def work_list_view(request):
+    works = Work.objects.prefetch_related('stacks').all() 
+    return render(request, 'main/works/work_list.html', {'works': works})
+# Work Add
+def add_work(request):
+    if request.method == 'POST':
+        form = WorkForm(request.POST, request.FILES)  
+        if form.is_valid():
+            work = form.save(commit=False)
+            selected_stacks = request.POST.getlist("stacks")
+            form.save()
+            if selected_stacks:
+                work.stacks.set(selected_stacks)
+            return redirect('work-list')  
+    else:
+        form = WorkForm()
+        stacks = Stack.objects.all() 
+    return render(request, 'main/works/add_work.html', {'form': form,"stacks": stacks})
+# Work Edit
+def edit_work(request, work_id):
+    work = get_object_or_404(Work, id=work_id)
+    if request.method == 'POST':
+        form = WorkForm(request.POST, request.FILES, instance=work)
+        if form.is_valid():
+            selected_stacks = request.POST.getlist("stacks")
+            form.save()  
+            if selected_stacks:
+                work.stacks.set(selected_stacks)
+            return redirect('work-list') 
+    else:
+        form = WorkForm(instance=work)  
+        stacks = Stack.objects.all() 
+    return render(request, 'main/works/edit_work.html', {'form': form, 'work': work, "stacks": stacks})
+# Work Delete
+def delete_work(request, work_id):
+    work = get_object_or_404(Work, id=work_id)
+    if request.method == 'POST':
+        work.delete()
+        messages.success(request, "Work deleted successfully")
+        return redirect('work-list') 
+    return render(request, 'main/works/delete_work.html', {'work': work})
+
+
+
+# Education
+def education_list_view(request):
+    educations = Education.objects.all() 
+    return render(request, 'main/educations/education_list.html', {'educations': educations})
+# Education Add
+def add_education(request):
+    if request.method == 'POST':
+        form = EducationForm(request.POST)  
+        if form.is_valid():
+            form.save()
+            return redirect('education-list')  
+    else:
+        form = EducationForm()
+    return render(request, 'main/educations/add_education.html', {'form': form})
+# Education Edit
+def edit_education(request, education_id):
+    education = get_object_or_404(Education, id=education_id)
+    if request.method == 'POST':
+        form = EducationForm(request.POST, request.FILES, instance=education)
+        if form.is_valid():
+            form.save()  
+            return redirect('education-list') 
+    else:
+        form = EducationForm(instance=education)  
+    return render(request, 'main/educations/edit_education.html', {'form': form, 'education': education})
+# Education Delete
+def delete_education(request, education_id):
+    education = get_object_or_404(Education, id=education_id)
+    if request.method == 'POST':
+        education.delete()
+        messages.success(request, "Education deleted successfully")
+        return redirect('education-list') 
+    return render(request, 'main/educations/delete_education.html', {'education': education})
+
+
+
+
+# Stack
+def stack_list_view(request):
+    stacks = Stack.objects.all() 
+    return render(request, 'main/stacks/stack_list.html', {'stacks': stacks})
+# Stack Add
+def add_stack(request):
+    if request.method == 'POST':
+        form = StackForm(request.POST, request.FILES)  
+        if form.is_valid():
+            form.save()
+            return redirect('stack-list')  
+    else:
+        form = StackForm()
+    return render(request, 'main/stacks/add_stack.html', {'form': form})
+# Stack Edit
+def edit_stack(request, stack_id):
+    stack = get_object_or_404(Stack, id=stack_id)
+    if request.method == 'POST':
+        form = StackForm(request.POST, request.FILES, instance=stack)
+        if form.is_valid():
+            form.save()  
+            return redirect('stack-list') 
+    else:
+        form = StackForm(instance=stack)  
+    return render(request, 'main/stacks/edit_stack.html', {'form': form, 'stack': stack})
+# Stack Delete
+def delete_stack(request, stack_id):
+    stack = get_object_or_404(Stack, id=stack_id)
+    if request.method == 'POST':
+        stack.delete()
+        messages.success(request, "Stack deleted successfully")
+        return redirect('stack-list') 
+    return render(request, 'main/stacks/delete_stack.html', {'stack': stack})
 
 
 
 
 # API
-class ProjectListView(APIView):
+class ProjectListAPIView(APIView):
     def get(self, request):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
+    
+class WorkListAPIView(APIView):
+    def get(self, request):
+        works = Work.objects.all()
+        serializer = WorkSerializer(works, many=True)
+        return Response(serializer.data)
+    
+class StackListAPIView(APIView):
+    def get(self, request):
+        stacks = Stack.objects.all()
+        serializer = StackSerializer(stacks, many=True)
+        return Response(serializer.data)
+    
+class EducationListAPIView(APIView):
+    def get(self, request):
+        educations = Education.objects.all()
+        serializer = EducationSerializer(educations, many=True)
         return Response(serializer.data)
