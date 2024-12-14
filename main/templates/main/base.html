@@ -18,14 +18,25 @@
     <header class="base-header">
         <div class="base-container base-header-container">
             <a href="{% url 'dashboard-view' %}" class="base-logo">Kevin's CMS</a>
+            
             <nav class="base-nav">
-                <a href="{% url 'dashboard-view' %}" class="base-nav-link">Home</a>
+                <a href="{% url 'dashboard-view' %}" class="base-nav-link">Dashboard</a>
                 <a href="{% url 'project-list' %}"  class="base-nav-link">Projects</a>
                 <a href="{% url 'work-list' %}" class="base-nav-link">Work</a>
                 <a href="{% url 'stack-list' %}" class="base-nav-link">Stack</a>
                 <a href="{% url 'education-list' %}" class="base-nav-link">Education</a>
-                <a href="/" class="base-nav-link">Logout</a>
             </nav>
+
+            <div class="base-login">
+                {% if user.is_authenticated %}
+                    <p>Welcome {{ user.username }}</p>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <p>You are not logged in.</p>
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </div>
+
         </div>
     </header>
 

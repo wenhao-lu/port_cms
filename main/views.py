@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from rest_framework.views import APIView
@@ -5,19 +6,44 @@ from rest_framework.response import Response
 from .models import Project, Work, Stack, Education
 from .serializers import ProjectSerializer, WorkSerializer, StackSerializer, EducationSerializer
 from .forms import ProjectForm, WorkForm, StackForm, EducationForm
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 
+
+# Authentication
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard/')
+        else:
+            return render(request, 'registration/login.html', {'error': 'Invalid login credentials'})
+    return render(request, 'registration/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+
+
+@login_required
 def dashboard_view(request):
-    context = {'title': 'Dashboard','message': 'Welcome to the Dashboard!' }
-    return render(request, 'main/dashboard.html', context)
+    return render(request, 'main/dashboard.html')
 
 # Controller
 # Project
+@login_required
 def project_list_view(request):
     projects = Project.objects.prefetch_related('stacks').all() 
     return render(request, 'main/projects/project_list.html', {'projects': projects})
 # Project Add
+@login_required
 def add_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)  
@@ -33,6 +59,7 @@ def add_project(request):
         stacks = Stack.objects.all() 
     return render(request, 'main/projects/add_project.html', {'form': form,"stacks": stacks})
 # Project Edit
+@login_required
 def edit_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     if request.method == 'POST':
@@ -48,6 +75,7 @@ def edit_project(request, project_id):
         stacks = Stack.objects.all() 
     return render(request, 'main/projects/edit_project.html', {'form': form, 'project': project, "stacks": stacks})
 # Project Delete
+@login_required
 def delete_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     if request.method == 'POST':
@@ -59,10 +87,12 @@ def delete_project(request, project_id):
 
 
 # Work
+@login_required
 def work_list_view(request):
     works = Work.objects.prefetch_related('stacks').all() 
     return render(request, 'main/works/work_list.html', {'works': works})
 # Work Add
+@login_required
 def add_work(request):
     if request.method == 'POST':
         form = WorkForm(request.POST, request.FILES)  
@@ -78,6 +108,7 @@ def add_work(request):
         stacks = Stack.objects.all() 
     return render(request, 'main/works/add_work.html', {'form': form,"stacks": stacks})
 # Work Edit
+@login_required
 def edit_work(request, work_id):
     work = get_object_or_404(Work, id=work_id)
     if request.method == 'POST':
@@ -93,6 +124,7 @@ def edit_work(request, work_id):
         stacks = Stack.objects.all() 
     return render(request, 'main/works/edit_work.html', {'form': form, 'work': work, "stacks": stacks})
 # Work Delete
+@login_required
 def delete_work(request, work_id):
     work = get_object_or_404(Work, id=work_id)
     if request.method == 'POST':
@@ -104,10 +136,12 @@ def delete_work(request, work_id):
 
 
 # Education
+@login_required
 def education_list_view(request):
     educations = Education.objects.all() 
     return render(request, 'main/educations/education_list.html', {'educations': educations})
 # Education Add
+@login_required
 def add_education(request):
     if request.method == 'POST':
         form = EducationForm(request.POST)  
@@ -118,6 +152,7 @@ def add_education(request):
         form = EducationForm()
     return render(request, 'main/educations/add_education.html', {'form': form})
 # Education Edit
+@login_required
 def edit_education(request, education_id):
     education = get_object_or_404(Education, id=education_id)
     if request.method == 'POST':
@@ -129,6 +164,7 @@ def edit_education(request, education_id):
         form = EducationForm(instance=education)  
     return render(request, 'main/educations/edit_education.html', {'form': form, 'education': education})
 # Education Delete
+@login_required
 def delete_education(request, education_id):
     education = get_object_or_404(Education, id=education_id)
     if request.method == 'POST':
@@ -141,10 +177,12 @@ def delete_education(request, education_id):
 
 
 # Stack
+@login_required
 def stack_list_view(request):
     stacks = Stack.objects.all() 
     return render(request, 'main/stacks/stack_list.html', {'stacks': stacks})
 # Stack Add
+@login_required
 def add_stack(request):
     if request.method == 'POST':
         form = StackForm(request.POST, request.FILES)  
@@ -155,6 +193,7 @@ def add_stack(request):
         form = StackForm()
     return render(request, 'main/stacks/add_stack.html', {'form': form})
 # Stack Edit
+@login_required
 def edit_stack(request, stack_id):
     stack = get_object_or_404(Stack, id=stack_id)
     if request.method == 'POST':
@@ -166,6 +205,7 @@ def edit_stack(request, stack_id):
         form = StackForm(instance=stack)  
     return render(request, 'main/stacks/edit_stack.html', {'form': form, 'stack': stack})
 # Stack Delete
+@login_required
 def delete_stack(request, stack_id):
     stack = get_object_or_404(Stack, id=stack_id)
     if request.method == 'POST':

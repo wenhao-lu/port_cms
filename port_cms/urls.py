@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include 
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import views as auth_views, authenticate, login, logout
+from django.contrib import messages
 from django.conf import settings                       
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('backend/', include('main.urls')),                                                     # cms app under 'dashboard/'
-    path('auth/', include('django.contrib.auth.urls')),                                                 # index page for user auth
-    path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('', include('main.urls')),   
     
 ]
 

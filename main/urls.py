@@ -8,8 +8,10 @@ urlpatterns = [
     path('api/works/', WorkListAPIView.as_view(), name='work-list-api'),
     path('api/stacks/', StackListAPIView.as_view(), name='stack-list-api'),
     path('api/educations/', EducationListAPIView.as_view(), name='education-list-api'),
-
-    path('', views.dashboard_view, name='dashboard-view'),
+                       
+    path('dashboard/', views.dashboard_view, name='dashboard-view'),
+    path('', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 
     path('projects/', views.project_list_view, name='project-list'),
     path('projects/add/', views.add_project, name='add-project'),
