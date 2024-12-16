@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hjb0s&%6%q2s1+(x^r5kq@pe&yjh@i7+aq@&dr&iahk0iy62=_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['cms.lu-kevin.com', 'www.lu-kevin.com']
+ALLOWED_HOSTS = ['cms.lu-kevin.com', 'www.lu-kevin.com', '127.0.0.1']
 
 
 # Application definition
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'port_cms.urls'
@@ -79,24 +80,24 @@ WSGI_APPLICATION = 'port_cms.wsgi.application'
 
 
 # Local
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-# }
-
-# Hosting
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lukevinc_django',  
-        'USER': 'lukevinc_django',    
-        'PASSWORD': '',  
-        'HOST': 'localhost',           
-        'PORT': '3306',                
+   'default': {        
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Hosting
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'lukevinc_django',  
+#        'USER': 'lukevinc_django',    
+#        'PASSWORD': '',  
+#        'HOST': 'localhost',           
+#        'PORT': '3306',                
+#    }
+# }
 
 
 

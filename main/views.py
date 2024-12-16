@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Work, Stack, Education
@@ -229,15 +230,33 @@ class WorkListAPIView(APIView):
         works = Work.objects.all()
         serializer = WorkSerializer(works, many=True)
         return Response(serializer.data)
-    
-class StackListAPIView(APIView):
-    def get(self, request):
-        stacks = Stack.objects.all()
-        serializer = StackSerializer(stacks, many=True)
-        return Response(serializer.data)
-    
+
 class EducationListAPIView(APIView):
     def get(self, request):
         educations = Education.objects.all()
         serializer = EducationSerializer(educations, many=True)
         return Response(serializer.data)
+    
+
+
+    
+class StackListAPIView(APIView):
+    def get(self, request):
+        stack_id = request.GET.get('id')
+        
+        if stack_id:
+            try:
+                # Retrieve the stack by id
+                stack = Stack.objects.get(id=stack_id)
+                serializer = StackSerializer(stack)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except Stack.DoesNotExist:
+                return Response({'error': 'Stack not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # return all stacks
+        stacks = Stack.objects.all()
+        serializer = StackSerializer(stacks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
